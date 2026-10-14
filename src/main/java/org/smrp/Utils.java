@@ -1,17 +1,19 @@
 package org.smrp;
 
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.smrp.models.ColumnMap;
 import org.bson.Document;
-
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.bson.BsonDateTime;
+
+import java.io.ByteArrayOutputStream;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Utils {
@@ -110,6 +112,90 @@ public class Utils {
             return Double.parseDouble(r);
         } catch (NumberFormatException e) {
             return 0.0;
+        }
+    }
+
+    public static byte[] getXlsx(List<ColumnMap> colmaps, List<Document> lx) throws Exception {
+        Workbook wb = new XSSFWorkbook();
+        ByteArrayOutputStream bx = new ByteArrayOutputStream();
+        System.out.println(lx.size());
+
+        try {
+            Sheet sh = wb.createSheet("Sheet1");
+
+            // Bold style for header row
+            CellStyle style = wb.createCellStyle();
+            Font font = wb.createFont();
+            font.setBold(true);
+            style.setFont(font);
+
+            int colOffset = 4;
+
+            // Header row
+            for (int i = 0; i < colmaps.size(); i++) {
+                // int j = i + 1; // 1-based, not used directly in POI but kept for width logic
+                ColumnMap cx = colmaps.get(i);
+
+                Row headerRow = sh.getRow(0);
+                if (headerRow == null) headerRow = sh.createRow(0);
+
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(cx.getText());
+                cell.setCellStyle(style);
+
+                int n = cx.getText().length();
+                sh.setColumnWidth(i, Math.min((n + colOffset) * 256, 255 * 256));
+            }
+
+            int k = 1; // (row 1 = header)
+            for (Document x : lx) {
+                Row row = sh.createRow(k); // POI rows are 0-based
+                for (int i = 0; i < colmaps.size(); i++) {
+                    ColumnMap cx = colmaps.get(i);
+                    String field = cx.getField();
+
+                    String s = "";
+                    Object val = x.get(field);
+                    if (val != null) {
+                        s = getStr(val);
+                    }
+
+                    Cell cell = row.createCell(i);
+                    cell.setCellValue(s);
+
+                    int n = s.length();
+                    int currentWidth = sh.getColumnWidth(i); // in 1/256 char units
+                    int currentChars = currentWidth / 256;
+                    if (n > (currentChars - colOffset)) {
+                        sh.setColumnWidth(i, Math.min((n + colOffset) * 256, 255 * 256));
+                    }
+                }
+                k++;
+            }
+
+            // for (int i = 0; i < colmaps.size(); i++) {
+            //     sh.autoSizeColumn(i);
+            // }
+
+            wb.write(bx);
+            return bx.toByteArray();
+        }
+        
+        catch (Exception e) {
+            throw e;
+        }
+
+        finally {
+            try {
+                if (wb != null) {
+                    wb.close();
+                }
+                if (bx != null) {
+                    bx.close();
+                }
+            } catch (Exception e) {
+                
+            }
         }
     }
 

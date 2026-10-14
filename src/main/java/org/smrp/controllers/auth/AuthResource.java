@@ -72,11 +72,11 @@ public class AuthResource {
     public Uni<Response> refresh(@Valid RefreshTokenDto data, @CookieParam("refreshToken") String cookieToken) {
         UnauthorizedException ex = new UnauthorizedException("Invalid Credentials");
         String refreshToken = cookieToken;
-        if (cookieToken == null || cookieToken == "") {
+        if (cookieToken == null || "".equals(cookieToken)) {
             refreshToken = data.getRefreshToken();
         }
 
-        if (refreshToken == null || refreshToken == "") {
+        if (refreshToken == null || "".equals(refreshToken)) {
             throw ex;
         }
 

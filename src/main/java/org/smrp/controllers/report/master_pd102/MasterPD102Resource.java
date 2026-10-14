@@ -1,7 +1,7 @@
 package org.smrp.controllers.report.master_pd102;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.Document;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -17,6 +17,7 @@ import io.quarkus.mongodb.reactive.ReactiveMongoCollection;
 import io.quarkus.mongodb.reactive.ReactiveMongoDatabase;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -67,16 +68,19 @@ public class MasterPD102Resource {
                     .limit(pg.getPageSize());
 
                 return col.find(options).collect().asList().flatMap(ls -> {
-                    List<Document> lr = Utils.processDoc(ls);
-                    HashMap<String, Object> result = new HashMap<>();
-                    result.put("columnmaps", ColMap.COLUMN_MAP);
-                    result.put("total_count", total);
-                    result.put("total_page", pg.getTotalPages());
-                    result.put("page", pg.getPageNum());
-                    result.put("data", lr);
-                    result.put("datefrom", dateFrom);
-                    result.put("dateto", dateTo);
-                    return Uni.createFrom().item(Response.ok(result).build());
+                    return Uni.createFrom().item(() -> {
+                        List<Document> lr = Utils.processDoc(ls);
+                        Map<String, Object> result = Map.of(
+                            "columnmaps", ColMap.COLUMN_MAP,
+                            "total_count", total,
+                            "total_page", pg.getTotalPages(),
+                            "page", pg.getPageNum(),
+                            "data", lr,
+                            "datefrom", dateFrom,
+                            "dateto", dateTo
+                        );
+                        return Response.ok(result).build();
+                    }).runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
                 });
             });
         });

@@ -32,7 +32,7 @@ public class CustomAuth implements HttpAuthenticationMechanism {
     @Override
     public Uni<SecurityIdentity> authenticate(RoutingContext context, IdentityProviderManager identityProviderManager) {
         String token = context.request().getHeader("Authorization");
-        if (token == null || token == "") {
+        if (token == null || "".equals(token)) {
             // No token found, delegate to other mechanisms or return anonymous identity
             Cookie cookieToken = context.request().getCookie("token");
             if (cookieToken == null) {
@@ -40,7 +40,7 @@ public class CustomAuth implements HttpAuthenticationMechanism {
             }
             
             token = cookieToken.getValue();
-            if (token == null || token == "") {
+            if (token == null || "".equals(token)) {
                 return Uni.createFrom().nullItem();
             }
         }
