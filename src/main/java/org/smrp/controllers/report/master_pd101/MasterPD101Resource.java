@@ -1,6 +1,7 @@
 package org.smrp.controllers.report.master_pd101;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.smrp.Utils;
+import org.smrp.controllers.report.Master;
 import org.smrp.filters.Auth;
 import org.smrp.models.Pager;
 import org.smrp.services.ReportService;
@@ -26,6 +28,7 @@ import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -33,14 +36,12 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import static com.mongodb.client.model.Filters.eq;
-
 
 @Tag(name = "Report/MasterPD101")
 @SecurityRequirement(name = "BearerAuth")
 @Path("/api/master-pd101")
 @Auth
-public class MasterPD101Resource {
+public class MasterPD101Resource extends Master {
 
     @ConfigProperty(name = "mongodb.prefix")
     String mongodbPrefix;
@@ -50,21 +51,20 @@ public class MasterPD101Resource {
 
     private final SecurityIdentity securityIdentity;
     private final ReactiveMongoClient mongoClient;
-    private final ReportService reportService;
 
-    public MasterPD101Resource(SecurityIdentity securityIdentity, ReactiveMongoClient mongoClient,
-            ReportService reportService) {
+    public MasterPD101Resource(SecurityIdentity securityIdentity, ReactiveMongoClient mongoClient, ReportService reportService) {
+        super(reportService);
         this.securityIdentity = securityIdentity;
         this.mongoClient = mongoClient;
-        this.reportService = reportService;
     }
 
     @GET
     @Path("/export/rpt2")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> jsonrh101(
-            @QueryParam("datefrom") @DefaultValue("") String datefrom,
-            @QueryParam("dateto") @DefaultValue("") String dateto) {
+        @QueryParam("datefrom") @DefaultValue("") String datefrom,
+        @QueryParam("dateto") @DefaultValue("") String dateto
+    ) {
         String username = securityIdentity.getPrincipal().getName();
         ReactiveMongoCollection<Document> col = getCollection(username, "1");
 
@@ -138,8 +138,7 @@ public class MasterPD101Resource {
                                     m.put("height", Utils.getNum(Utils.getStr(doc.get("HEIGHT"))));
                                     m.put("weight", Utils.getNum(Utils.getStr(doc.get("WEIGHT"))));
                                     m.put("refForeignerOriginCountryCode", md.get("refForeignerOriginCountryCode"));
-                                    m.put("refForeignerResidenceCountryCode",
-                                            md.get("refForeignerResidenceCountryCode"));
+                                    m.put("refForeignerResidenceCountryCode", md.get("refForeignerResidenceCountryCode"));
                                     m.put("refPersonCategoryCode", md.get("refPersonCategoryCode"));
                                     m.put("refRelationshipCode", md.get("refRelationshipCode"));
                                     m.put("totalDurationDay", "0");
@@ -178,8 +177,9 @@ public class MasterPD101Resource {
     @Path("/export/rpt1")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> jsonpd101(
-            @QueryParam("datefrom") @DefaultValue("") String datefrom,
-            @QueryParam("dateto") @DefaultValue("") String dateto) {
+        @QueryParam("datefrom") @DefaultValue("") String datefrom,
+        @QueryParam("dateto") @DefaultValue("") String dateto
+    ) {
         String username = securityIdentity.getPrincipal().getName();
         ReactiveMongoCollection<Document> col = getCollection(username, "0");
 
@@ -240,9 +240,9 @@ public class MasterPD101Resource {
                                     Map<String, Object> m = new LinkedHashMap<>();
                                     m.put("rn", Utils.getStr(doc.get("ACCOUNT_NO")));
                                     m.put("mrn", Utils.getStr(doc.get("PRN")));
-                                    m.put("eventDate",
-                                            String.format("%s %s:00", doc.get("REGISTRATION_DATE"),
-                                                    doc.get("REGISTRATION_TIME")));
+                                    m.put("eventDate", String.format("%s %s:00", 
+                                            doc.get("REGISTRATION_DATE"),
+                                            doc.get("REGISTRATION_TIME")));
                                     m.put("isPoliceCase", "02");
                                     m.put("internalReferral", "false");
                                     m.put("refReferralSourceCode", md.get("refReferralSourceCode"));
@@ -254,17 +254,15 @@ public class MasterPD101Resource {
                                     m.put("refEthnicCode", md.get("refEthnicCode"));
                                     m.put("height", Utils.getNum(Utils.getStr(doc.get("HEIGHT"))));
                                     m.put("weight", Utils.getNum(Utils.getStr(doc.get("WEIGHT"))));
-                                    m.put("refForeignerOriginCountryCode",
-                                            md.get("refForeignerOriginCountryCode"));
-                                    m.put("refForeignerResidenceCountryCode",
-                                            md.get("refForeignerResidenceCountryCode"));
+                                    m.put("refForeignerOriginCountryCode", md.get("refForeignerOriginCountryCode"));
+                                    m.put("refForeignerResidenceCountryCode", md.get("refForeignerResidenceCountryCode"));
                                     m.put("refPersonCategoryCode", md.get("refPersonCategoryCode"));
                                     m.put("refRelationshipCode", md.get("refRelationshipCode"));
                                     m.put("totalDurationDay", "0");
                                     m.put("refWardTransitionTypeCode", "A");
-                                    m.put("wardDateTime",
-                                            String.format("%s %s:00", doc.get("ADMISSION_DATE"),
-                                                    doc.get("ADMISSION_TIME")));
+                                    m.put("wardDateTime", String.format("%s %s:00", 
+                                            doc.get("ADMISSION_DATE"),
+                                            doc.get("ADMISSION_TIME")));
                                     m.put("wardCode", Utils.getStr(doc.get("WARD_NO")));
                                     m.put("refDisciplineCode", md.get("refDisciplineCode"));
                                     m.put("refSpecialityCode", md.get("refDisciplineCode"));
@@ -291,7 +289,7 @@ public class MasterPD101Resource {
                                         .header("filename", filename)
                                         .header("Content-Type", MediaType.APPLICATION_JSON)
                                         .build();
-                            }).runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
+                            });
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -303,9 +301,10 @@ public class MasterPD101Resource {
     @Path("/export/rpt1/xlsx")
     @Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     public Uni<Response> xlsx(
-            @QueryParam("vt") @DefaultValue("0") String vt,
-            @QueryParam("datefrom") @DefaultValue("") String datefrom,
-            @QueryParam("dateto") @DefaultValue("") String dateto) {
+        @QueryParam("vt") @DefaultValue("0") String vt,
+        @QueryParam("datefrom") @DefaultValue("") String datefrom,
+        @QueryParam("dateto") @DefaultValue("") String dateto
+    ) {
         String username = securityIdentity.getPrincipal().getName();
         ReactiveMongoCollection<Document> col = getCollection(username, vt);
 
@@ -340,11 +339,12 @@ public class MasterPD101Resource {
     @Path("/rpt1")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> list(
-            @QueryParam("_page") @DefaultValue("1") Integer page,
-            @QueryParam("_limit") @DefaultValue("20") Integer limit,
-            @QueryParam("vt") @DefaultValue("0") String vt,
-            @QueryParam("datefrom") @DefaultValue("") String datefrom,
-            @QueryParam("dateto") @DefaultValue("") String dateto) {
+        @QueryParam("_page") @DefaultValue("1") Integer page,
+        @QueryParam("_limit") @DefaultValue("20") Integer limit,
+        @QueryParam("vt") @DefaultValue("0") String vt,
+        @QueryParam("datefrom") @DefaultValue("") String datefrom,
+        @QueryParam("dateto") @DefaultValue("") String dateto
+    ) {
         String username = securityIdentity.getPrincipal().getName();
         ReactiveMongoDatabase db = getDb(vt);
         ReactiveMongoCollection<Document> col = db.getCollection(String.format("__%s__", username));
@@ -385,13 +385,34 @@ public class MasterPD101Resource {
         ReactiveMongoCollection<Document> col = getCollection(username, vt);
         try {
             ObjectId objectId = new ObjectId(id);
-            return col.find(eq("_id", objectId)).collect().first().flatMap(doc -> {
+            return col.find(new Document("_id", objectId)).collect().first().flatMap(doc -> {
+                if (doc == null) {
+                    return Uni.createFrom().failure(new NotFoundException("Record not found"));
+                }
+
                 doc.put("_id", doc.getObjectId("_id").toString());
                 return Uni.createFrom().item(Response.ok(doc).build());
             }).onItem().ifNull().switchTo(Uni.createFrom().failure(new NotFoundException("Record not found")));
         } catch (Exception e) {
-            throw new NotFoundException("Record not found");
+            return Uni.createFrom().failure(new NotFoundException("Record not found"));
         }
+    }
+
+    @PUT
+    @Path("/rpt1/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Uni<Response> update(@PathParam("id") String id, @QueryParam("vt") @DefaultValue("0") String vt, Document data) {
+        String username = securityIdentity.getPrincipal().getName();
+        ReactiveMongoCollection<Document> col = getCollection(username, vt);
+        ObjectId objectId = new ObjectId(id);
+        Document filter = new Document("_id", objectId);
+        data.put("_id", objectId);
+        Document updateData = new Document("$set", data);
+        return col.findOneAndUpdate(filter, updateData).flatMap(x -> {
+            HashMap<String, Object> mx = new HashMap<>();
+            mx.put("success", 1);
+            return Uni.createFrom().item(Response.ok(mx).build());
+        });
     }
 
     private ReactiveMongoCollection<Document> getCollection(String username, String vt) {
@@ -412,74 +433,5 @@ public class MasterPD101Resource {
         }
 
         return db;
-    }
-
-    private Uni<Map<String, String>> getData(Document doc) {
-        Uni<String> refPersonTitleCode = reportService.refPersonTitleCode(doc);
-        Uni<String> refIdentificationTypeCode = reportService.refIdentificationTypeCode(doc);
-        Uni<String> refCityCode = reportService.refCityCode(doc);
-        Uni<String> refStateCode = reportService.refStateCode(doc);
-        Uni<String> refCountryCode = reportService.refCitizenshipCode(doc);
-
-        Uni<String> refPersonTitleCodeNOK = reportService.refPersonTitleCodeNOK(doc);
-        Uni<String> refIdentificationTypeCodeNOK = reportService.refIdentificationTypeCodeNOK(doc);
-        Uni<String> refCityCodeNOK = reportService.refCityCodeNOK(doc);
-        Uni<String> refStateCodeNOK = reportService.refStateCodeNOK(doc);
-        Uni<String> refCitizenshipCodeNOK = reportService.refCitizenshipCodeNOK(doc);
-
-        Uni<String> refReferralSourceCode = reportService.refReferralSourceCode(doc);
-        Uni<String> refGenderCode = reportService.refGenderCode(doc);
-        Uni<String> refMaritalStatusCode = reportService.refMaritalStatusCode(doc);
-        Uni<String> refReligionCode = reportService.refReligionCode(doc);
-        Uni<String> refCitizenshipCode = reportService.refCitizenshipCode(doc);
-
-        Uni<String> refEthnicCode = reportService.refEthnicCode(doc);
-        Uni<String> refForeignerOriginCountryCode = reportService.refForeignerOriginCountryCode(doc);
-        Uni<String> refForeignerResidenceCountryCode = reportService.refForeignerResidenceCountryCode(doc);
-        Uni<String> refPersonCategoryCode = reportService.refPersonCategoryCode(doc);
-        Uni<String> refRelationshipCode = reportService.refRelationshipCode(doc);
-
-        Uni<String> refDisciplineCode = reportService.refDisciplineCode(doc);
-        Uni<String> refWardClassCode = reportService.refWardClassCode(doc);
-
-        return Uni.combine().all().unis(
-                refPersonTitleCode, refIdentificationTypeCode, refCityCode, refStateCode, refCountryCode,
-                refPersonTitleCodeNOK, refIdentificationTypeCodeNOK, refCityCodeNOK, refStateCodeNOK,
-                refCitizenshipCodeNOK,
-                refReferralSourceCode, refGenderCode, refMaritalStatusCode, refReligionCode, refCitizenshipCode,
-                refEthnicCode, refForeignerOriginCountryCode, refForeignerResidenceCountryCode, refPersonCategoryCode,
-                refRelationshipCode,
-                refDisciplineCode, refWardClassCode).with(list -> {
-
-                    Map<String, String> m = Map.ofEntries(
-                            Map.entry("refPersonTitleCode", list.get(0).toString()),
-                            Map.entry("refIdentificationTypeCode", list.get(1).toString()),
-                            Map.entry("refCityCode", list.get(2).toString()),
-                            Map.entry("refStateCode", list.get(3).toString()),
-                            Map.entry("refCountryCode", list.get(4).toString()),
-
-                            Map.entry("refPersonTitleCodeNOK", list.get(5).toString()),
-                            Map.entry("refIdentificationTypeCodeNOK", list.get(6).toString()),
-                            Map.entry("refCityCodeNOK", list.get(7).toString()),
-                            Map.entry("refStateCodeNOK", list.get(8).toString()),
-                            Map.entry("refCitizenshipCodeNOK", list.get(9).toString()),
-
-                            Map.entry("refReferralSourceCode", list.get(10).toString()),
-                            Map.entry("refGenderCode", list.get(11).toString()),
-                            Map.entry("refMaritalStatusCode", list.get(12).toString()),
-                            Map.entry("refReligionCode", list.get(13).toString()),
-                            Map.entry("refCitizenshipCode", list.get(14).toString()),
-
-                            Map.entry("refEthnicCode", list.get(15).toString()),
-                            Map.entry("refForeignerOriginCountryCode", list.get(16).toString()),
-                            Map.entry("refForeignerResidenceCountryCode", list.get(17).toString()),
-                            Map.entry("refPersonCategoryCode", list.get(18).toString()),
-                            Map.entry("refRelationshipCode", list.get(19).toString()),
-
-                            Map.entry("refDisciplineCode", list.get(20).toString()),
-                            Map.entry("refWardClassCode", list.get(21).toString()));
-
-                    return m;
-                });
     }
 }
