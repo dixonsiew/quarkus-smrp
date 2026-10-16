@@ -40,13 +40,12 @@ public class AuthResource {
         UnauthorizedException ex = new UnauthorizedException("Invalid Credentials");
         return userService.findByUsername(data.username()).flatMap(user -> {
             if (user == null) {
-                throw ex;
+                return Uni.createFrom().failure(ex);
             }
 
-            boolean valid = false;
-            valid = userService.validateCredentials(user, data.password());
+            boolean valid = userService.validateCredentials(user, data.password());
             if (!valid) {
-                throw ex;
+                return Uni.createFrom().failure(ex);
             }
 
             return userService.updateLastLogin(user.getId()).flatMap(x -> {
@@ -79,7 +78,7 @@ public class AuthResource {
         }
 
         if (refreshToken == null || "".equals(refreshToken)) {
-            throw ex;
+            return Uni.createFrom().failure(ex);
         }
 
         return tokenService.createAccessTokenFromRefreshToken(refreshToken).flatMap(md -> {

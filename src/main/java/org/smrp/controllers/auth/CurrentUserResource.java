@@ -42,7 +42,7 @@ public class CurrentUserResource {
         String username = securityIdentity.getPrincipal().getName();
         return userService.findByUsername(username).flatMap(user -> {
             if (user == null) {
-                throw new NotFoundException("User not found");
+                return Uni.createFrom().failure(new NotFoundException("User not found"));
             }
 
             HashMap<String, Object> mx = new HashMap<>();
@@ -59,14 +59,14 @@ public class CurrentUserResource {
     @Path("/change-password")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> changePassword(@Valid ChangePasswordDto data) {
-        if (data.password() != data.confirmPassword()) {
-            throw new BadRequestException("Confirm Password does not match");
+        if (!data.password().equals(data.confirmPassword())) {
+            return Uni.createFrom().failure(new BadRequestException("Confirm Password does not match"));
         }
 
         String username = securityIdentity.getPrincipal().getName();
         return userService.findByUsername(username).flatMap(user -> {
             if (user == null) {
-                throw new NotFoundException("User not found");
+                return Uni.createFrom().failure(new NotFoundException("User not found"));
             }
 
             user.setPassword(data.password());
