@@ -180,10 +180,6 @@ public class Utils {
             wb.write(bx);
             return bx.toByteArray();
         }
-        
-        catch (Exception e) {
-            throw e;
-        }
 
         finally {
             try {

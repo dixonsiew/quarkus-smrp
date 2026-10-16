@@ -147,7 +147,7 @@ public class ReligionResource {
     public Uni<CommonSetup> edit(@PathParam("id") Long id) {
         return commonSetupService.findById(id, table).flatMap(item -> {
             if (item == null) {
-                throw new NotFoundException("Record not found");
+                return Uni.createFrom().failure(new NotFoundException("Record not found"));
             }
             return Uni.createFrom().item(item);
         });
@@ -160,7 +160,7 @@ public class ReligionResource {
         Long userId = (Long) securityIdentity.getAttribute("id");
         return commonSetupService.findById(id, table).flatMap(item -> {
             if (item == null) {
-                throw new NotFoundException("Record not found");
+                return Uni.createFrom().failure(new NotFoundException("Record not found"));
             }
 
             item.setCode(data.code());

@@ -121,12 +121,12 @@ public class UserResource {
     public Uni<Response> create(@Valid UserDto data) {
         return userService.existsByUsername(data.username()).flatMap(b -> {
             if (b) {
-                throw new BadRequestException("A user with that username already exists");
+                return Uni.createFrom().failure(new BadRequestException("A user with that username already exists"));
             }
 
             return roleService.findById(data.roleId()).flatMap(role -> {
                 if (role == null) {
-                    throw new NotFoundException("Role not found");
+                    return Uni.createFrom().failure(new NotFoundException("Role not found"));
                 }
 
                 User o = new User();
@@ -150,7 +150,7 @@ public class UserResource {
     public Uni<User> edit(@PathParam("id") Long id) {
         return userService.findById(id).flatMap(item -> {
             if (item == null) {
-                throw new NotFoundException("Record not found");
+                return Uni.createFrom().failure(new NotFoundException("Record not found"));
             }
             return Uni.createFrom().item(item);
         });
@@ -163,12 +163,12 @@ public class UserResource {
         String password = data.password();
         return userService.existsByOtherUsername(data.username(), id).flatMap(b -> {
             if (b) {
-                throw new BadRequestException("A user with that username already exists");
+                return Uni.createFrom().failure(new BadRequestException("A user with that username already exists"));
             }
 
             return roleService.findById(data.roleId()).flatMap(role -> {
                 if (role == null) {
-                    throw new NotFoundException("Role not found");
+                    return Uni.createFrom().failure(new NotFoundException("Role not found"));
                 }
 
                 User o = new User();
