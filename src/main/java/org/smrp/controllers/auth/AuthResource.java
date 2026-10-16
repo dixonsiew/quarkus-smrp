@@ -1,9 +1,11 @@
 package org.smrp.controllers.auth;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.smrp.dtos.LoginDto;
 import org.smrp.dtos.RefreshTokenDto;
-import org.smrp.models.TokenResponse;
 import org.smrp.services.TokenService;
 import org.smrp.services.UserService;
 
@@ -51,14 +53,14 @@ public class AuthResource {
                 String token = tokenService.generateAccessToken(user);
                 String refreshToken = tokenService.generateRefreshToken(user);
 
-                TokenResponse tokenResponse = new TokenResponse();
-                tokenResponse.setType("bearer");
-                tokenResponse.setToken(token);
-                tokenResponse.setRefreshToken(refreshToken);
+                Map<String, String> mx = new LinkedHashMap<>();
+                mx.put("type", "bearer");
+                mx.put("token", token);
+                mx.put("refresh_token", refreshToken);
                 
                 NewCookie cookie = createCookie("token", token, "/", 30 * 24 * 60 * 60);
                 NewCookie refreshCookie = createCookie("refreshToken", refreshToken, "/smrp/o/refresh-token", 3650 * 24 * 60 * 60);
-                return Uni.createFrom().item(Response.ok(tokenResponse)
+                return Uni.createFrom().item(Response.ok(mx)
                     .cookie(cookie)
                     .cookie(refreshCookie)
                     .build());
@@ -80,18 +82,18 @@ public class AuthResource {
             throw ex;
         }
 
-        return tokenService.createAccessTokenFromRefreshToken(refreshToken).flatMap(mx -> {
-            String token = (String) mx.get("token");
-            String rtoken = (String) mx.get("refreshToken");
+        return tokenService.createAccessTokenFromRefreshToken(refreshToken).flatMap(md -> {
+            String token = (String) md.get("token");
+            String rtoken = (String) md.get("refreshToken");
             
-            TokenResponse tokenResponse = new TokenResponse();
-            tokenResponse.setType("bearer");
-            tokenResponse.setToken(token);
-            tokenResponse.setRefreshToken(rtoken);
+            Map<String, String> mx = new LinkedHashMap<>();
+            mx.put("type", "bearer");
+            mx.put("token", token);
+            mx.put("refresh_token", rtoken);
             
             NewCookie cookie = createCookie("token", token, "/", 30 * 24 * 60 * 60);
             NewCookie refreshCookie = createCookie("refreshToken", rtoken, "/smrp/o/refresh-token", 3650 * 24 * 60 * 60);
-            return Uni.createFrom().item(Response.ok(tokenResponse)
+            return Uni.createFrom().item(Response.ok(mx)
                 .cookie(cookie)
                 .cookie(refreshCookie)
                 .build());

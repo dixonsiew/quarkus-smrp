@@ -45,7 +45,22 @@ public class CustomAuth implements HttpAuthenticationMechanism {
             }
         }
 
-        String tokenStr = token.replace("Bearer ", "");
+        if (token.startsWith("Bearer")) {
+            token = token.replace("Bearer ", "").replace("Bearer", "");
+            if ("".equals(token)) {
+                Cookie cookieToken = context.request().getCookie("token");
+                if (cookieToken == null) {
+                    return Uni.createFrom().nullItem();
+                }
+                
+                token = cookieToken.getValue();
+                if (token == null || "".equals(token)) {
+                    return Uni.createFrom().nullItem();
+                }
+            }
+        }
+
+        String tokenStr = token.replace("Bearer ", "").replace("Bearer", "");
         Claims claims = tokenService.decodeToken(tokenStr);
         String sub = claims.getSubject();
         String username = (String) claims.get("username");

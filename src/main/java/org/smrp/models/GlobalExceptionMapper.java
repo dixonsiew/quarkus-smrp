@@ -5,6 +5,7 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
+import io.quarkus.logging.Log;
 import io.quarkus.security.UnauthorizedException;
 
 
@@ -21,6 +22,7 @@ public class GlobalExceptionMapper {
 
     @ServerExceptionMapper
     public Response handleRuntimeException(RuntimeException exception) {
+        Log.error("RuntimeException: " + exception.getMessage(), exception);
         ErrorResponse error = new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), exception.getMessage());
         
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
