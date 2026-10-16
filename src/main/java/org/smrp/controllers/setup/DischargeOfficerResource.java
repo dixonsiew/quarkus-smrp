@@ -130,9 +130,9 @@ public class DischargeOfficerResource {
     public Uni<Response> create(@Valid CommonSetupDto data) {
         Long userId = (Long) securityIdentity.getAttribute("id");
         CommonSetup o = new CommonSetup();
-        o.setCode(data.getCode());
-        o.setDesc(data.getDesc());
-        o.setRef(data.getRef());
+        o.setCode(data.code());
+        o.setDesc(data.desc());
+        o.setRef(data.ref());
         o.setCreatedBy(userId);
         return commonSetupService.save(o, table).flatMap(x -> {
             HashMap<String, Object> mx = new HashMap<>();
@@ -163,9 +163,9 @@ public class DischargeOfficerResource {
                 throw new NotFoundException("Record not found");
             }
 
-            item.setCode(data.getCode());
-            item.setDesc(data.getDesc());
-            item.setRef(data.getRef());
+            item.setCode(data.code());
+            item.setDesc(data.desc());
+            item.setRef(data.ref());
             item.setModifiedBy(userId);
             return commonSetupService.update(item, table).flatMap(x -> {
                 HashMap<String, Object> mx = new HashMap<>();

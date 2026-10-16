@@ -38,13 +38,13 @@ public class AuthResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> login(@Valid LoginDto data) {
         UnauthorizedException ex = new UnauthorizedException("Invalid Credentials");
-        return userService.findByUsername(data.getUsername()).flatMap(user -> {
+        return userService.findByUsername(data.username()).flatMap(user -> {
             if (user == null) {
                 throw ex;
             }
 
             boolean valid = false;
-            valid = userService.validateCredentials(user, data.getPassword());
+            valid = userService.validateCredentials(user, data.password());
             if (!valid) {
                 throw ex;
             }
@@ -75,7 +75,7 @@ public class AuthResource {
         UnauthorizedException ex = new UnauthorizedException("Invalid Credentials");
         String refreshToken = cookieToken;
         if (cookieToken == null || "".equals(cookieToken)) {
-            refreshToken = data.getRefreshToken();
+            refreshToken = data.refreshToken();
         }
 
         if (refreshToken == null || "".equals(refreshToken)) {

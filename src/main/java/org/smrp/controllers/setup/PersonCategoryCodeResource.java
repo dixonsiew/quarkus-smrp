@@ -1,5 +1,8 @@
 package org.smrp.controllers.setup;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.smrp.Constants;
@@ -13,21 +16,18 @@ import org.smrp.services.CommonSetupService;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.HashMap;
-import java.util.List;
 
 
 @Tag(name = "Setup/Person Category Code")
@@ -130,9 +130,9 @@ public class PersonCategoryCodeResource {
     public Uni<Response> create(@Valid CommonSetupDto data) {
         Long userId = (Long) securityIdentity.getAttribute("id");
         CommonSetup o = new CommonSetup();
-        o.setCode(data.getCode());
-        o.setDesc(data.getDesc());
-        o.setRef(data.getRef());
+        o.setCode(data.code());
+        o.setDesc(data.desc());
+        o.setRef(data.ref());
         o.setCreatedBy(userId);
         return commonSetupService.save(o, table).flatMap(x -> {
             HashMap<String, Object> mx = new HashMap<>();
@@ -163,9 +163,9 @@ public class PersonCategoryCodeResource {
                 throw new NotFoundException("Record not found");
             }
 
-            item.setCode(data.getCode());
-            item.setDesc(data.getDesc());
-            item.setRef(data.getRef());
+            item.setCode(data.code());
+            item.setDesc(data.desc());
+            item.setRef(data.ref());
             item.setModifiedBy(userId);
             return commonSetupService.update(item, table).flatMap(x -> {
                 HashMap<String, Object> mx = new HashMap<>();

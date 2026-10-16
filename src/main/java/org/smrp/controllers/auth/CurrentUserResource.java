@@ -1,5 +1,7 @@
 package org.smrp.controllers.auth;
 
+import java.util.HashMap;
+
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.smrp.dtos.ChangePasswordDto;
@@ -17,8 +19,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.HashMap;
 
 
 @Tag(name = "Auth")
@@ -59,7 +59,7 @@ public class CurrentUserResource {
     @Path("/change-password")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> changePassword(@Valid ChangePasswordDto data) {
-        if (data.getPassword() != data.getConfirmPassword()) {
+        if (data.password() != data.confirmPassword()) {
             throw new BadRequestException("Confirm Password does not match");
         }
 
@@ -69,7 +69,7 @@ public class CurrentUserResource {
                 throw new NotFoundException("User not found");
             }
 
-            user.setPassword(data.getPassword());
+            user.setPassword(data.password());
             return userService.updatePassword(user).flatMap(x -> {
                 HashMap<String, Object> mx = new HashMap<>();
                 mx.put("success", 1);

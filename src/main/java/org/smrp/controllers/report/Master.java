@@ -42,16 +42,15 @@ public class Master {
         Uni<String> refRelationshipCode = reportService.refRelationshipCode(doc);
 
         Uni<String> refDisciplineCode = reportService.refDisciplineCode(doc);
+        Uni<String> refDisciplineCode1 = reportService.refDisciplineCode1(doc);
         Uni<String> refWardClassCode = reportService.refWardClassCode(doc);
 
         return Uni.combine().all().unis(
             refPersonTitleCode, refIdentificationTypeCode, refCityCode, refStateCode, refCountryCode,
-            refPersonTitleCodeNOK, refIdentificationTypeCodeNOK, refCityCodeNOK, refStateCodeNOK,
-            refCitizenshipCodeNOK,
+            refPersonTitleCodeNOK, refIdentificationTypeCodeNOK, refCityCodeNOK, refStateCodeNOK, refCitizenshipCodeNOK,
             refReferralSourceCode, refGenderCode, refMaritalStatusCode, refReligionCode, refCitizenshipCode,
-            refEthnicCode, refForeignerOriginCountryCode, refForeignerResidenceCountryCode, refPersonCategoryCode,
-            refRelationshipCode,
-            refDisciplineCode, refWardClassCode).with(list -> {
+            refEthnicCode, refForeignerOriginCountryCode, refForeignerResidenceCountryCode, refPersonCategoryCode, refRelationshipCode,
+            refDisciplineCode, refDisciplineCode1, refWardClassCode).with(list -> {
                 Map<String, String> m = Map.ofEntries(
                     Map.entry("refPersonTitleCode", list.get(0).toString()),
                     Map.entry("refIdentificationTypeCode", list.get(1).toString()),
@@ -78,7 +77,9 @@ public class Master {
                     Map.entry("refRelationshipCode", list.get(19).toString()),
 
                     Map.entry("refDisciplineCode", list.get(20).toString()),
-                    Map.entry("refWardClassCode", list.get(21).toString()));
+                    Map.entry("refDisciplineCode1", list.get(21).toString()),
+                    Map.entry("refWardClassCode", list.get(22).toString())
+                );
 
                 return m;
             });

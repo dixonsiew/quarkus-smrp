@@ -237,8 +237,8 @@ public class MasterPD105Resource extends Master {
         ReactiveMongoCollection<Document> col2 = db.getCollection(String.format("__%s-q__", username));
         return col.countDocuments().flatMap(total -> {
             return col2.find().collect().asList().flatMap(ld -> {
-                final String dateFrom = ld.size() > 0 ? ld.get(0).getString("datefrom") : datefrom;
-                final String dateTo = ld.size() > 0 ? ld.get(0).getString("dateto") : dateto;
+                final String dateFrom = !ld.isEmpty() ? ld.get(0).getString("datefrom") : datefrom;
+                final String dateTo = !ld.isEmpty() ? ld.get(0).getString("dateto") : dateto;
 
                 Pager pg = Pager.from(total, page, limit);
                 FindOptions options = new FindOptions()

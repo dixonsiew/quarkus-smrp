@@ -1,5 +1,8 @@
 package org.smrp.controllers.setup;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.smrp.Constants;
@@ -26,9 +29,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.HashMap;
-import java.util.List;
 
 
 @Tag(name = "Setup/User")
@@ -119,21 +119,21 @@ public class UserResource {
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> create(@Valid UserDto data) {
-        return userService.existsByUsername(data.getUsername()).flatMap(b -> {
+        return userService.existsByUsername(data.username()).flatMap(b -> {
             if (b) {
                 throw new BadRequestException("A user with that username already exists");
             }
 
-            return roleService.findById(data.getRoleId()).flatMap(role -> {
+            return roleService.findById(data.roleId()).flatMap(role -> {
                 if (role == null) {
                     throw new NotFoundException("Role not found");
                 }
 
                 User o = new User();
-                o.setUsername(data.getUsername());;
-                o.setPassword(data.getPassword());;
-                o.setFirstName(data.getFirstname());
-                o.setLastName(data.getLastname());
+                o.setUsername(data.username());
+                o.setPassword(data.password());
+                o.setFirstName(data.firstname());
+                o.setLastName(data.lastname());
                 o.setRoles(List.of(role));
                 return userService.save(o).flatMap(x -> {
                     HashMap<String, Object> mx = new HashMap<>();
@@ -160,23 +160,23 @@ public class UserResource {
     @Path("/user/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> update(@PathParam("id") Long id, @Valid UserDto data) {
-        String password = data.getPassword();
-        return userService.existsByOtherUsername(data.getUsername(), id).flatMap(b -> {
+        String password = data.password();
+        return userService.existsByOtherUsername(data.username(), id).flatMap(b -> {
             if (b) {
                 throw new BadRequestException("A user with that username already exists");
             }
 
-            return roleService.findById(data.getRoleId()).flatMap(role -> {
+            return roleService.findById(data.roleId()).flatMap(role -> {
                 if (role == null) {
                     throw new NotFoundException("Role not found");
                 }
 
                 User o = new User();
                 o.setId(id);
-                o.setUsername(data.getUsername());;
-                o.setPassword(password != "********" ? data.getPassword() : "");;
-                o.setFirstName(data.getFirstname());
-                o.setLastName(data.getLastname());
+                o.setUsername(data.username());
+                o.setPassword(!"********".equals(password) ? data.password() : "");
+                o.setFirstName(data.firstname());
+                o.setLastName(data.lastname());
                 o.setRoles(List.of(role));
                 return userService.update(o).flatMap(x -> {
                     HashMap<String, Object> mx = new HashMap<>();
