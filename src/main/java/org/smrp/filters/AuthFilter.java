@@ -25,7 +25,7 @@ public class AuthFilter {
         if (token.isEmpty()) {
             String authHeader = context.getHeaderString("Authorization");
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                token = authHeader.replace("Bearer ", "");
+                token = authHeader.replace("Bearer ", "").replace("Bearer", "").trim();
             }
         }
          
