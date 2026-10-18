@@ -32,6 +32,16 @@ public class AuthResource {
         this.tokenService = tokenService;
         this.userService = userService;
     }
+
+    @POST
+    @Path("/logout")
+    public Uni<Response> logout() {
+        NewCookie tokenCookie = createCookie("token", "", "/", 0);
+        NewCookie refreshTokenCookie = createCookie("refreshToken", "", "/smrp/o/refresh-token", 0);
+        return Uni.createFrom().item(Response.ok(Map.of("message", "Logged out successfully"))
+            .cookie(tokenCookie, refreshTokenCookie)
+            .build());
+    }
     
     @POST
     @Path("/token")
@@ -60,8 +70,7 @@ public class AuthResource {
                 NewCookie cookie = createCookie("token", token, "/", 30 * 24 * 60 * 60);
                 NewCookie refreshCookie = createCookie("refreshToken", refreshToken, "/smrp/o/refresh-token", 3650 * 24 * 60 * 60);
                 return Uni.createFrom().item(Response.ok(mx)
-                    .cookie(cookie)
-                    .cookie(refreshCookie)
+                    .cookie(cookie, refreshCookie)
                     .build());
             });
         });
@@ -93,8 +102,7 @@ public class AuthResource {
             NewCookie cookie = createCookie("token", token, "/", 30 * 24 * 60 * 60);
             NewCookie refreshCookie = createCookie("refreshToken", rtoken, "/smrp/o/refresh-token", 3650 * 24 * 60 * 60);
             return Uni.createFrom().item(Response.ok(mx)
-                .cookie(cookie)
-                .cookie(refreshCookie)
+                .cookie(cookie, refreshCookie)
                 .build());
         });
     }
