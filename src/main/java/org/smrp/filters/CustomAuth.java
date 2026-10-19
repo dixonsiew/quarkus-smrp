@@ -60,7 +60,7 @@ public class CustomAuth implements HttpAuthenticationMechanism {
             }
         }
 
-        String tokenStr = token.replace("Bearer ", "").replace("Bearer", "").trim();
+        String tokenStr = token.trim();
         Claims claims = tokenService.decodeToken(tokenStr);
         String sub = claims.getSubject();
         String username = (String) claims.get("username");
