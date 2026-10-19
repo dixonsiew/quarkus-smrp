@@ -1,1 +1,3 @@
 ./mvnw quarkus:dev
+
+./mvnw package
