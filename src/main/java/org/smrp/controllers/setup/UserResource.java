@@ -174,7 +174,7 @@ public class UserResource {
                 User o = new User();
                 o.setId(id);
                 o.setUsername(data.username());
-                o.setPassword(!"********".equals(password) ? data.password() : "");
+                o.setPassword(!"********".equals(password) ? password : "");
                 o.setFirstName(data.firstname());
                 o.setLastName(data.lastname());
                 o.setRoles(List.of(role));
