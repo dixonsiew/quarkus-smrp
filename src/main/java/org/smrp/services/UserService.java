@@ -97,7 +97,7 @@ public class UserService {
 
     public Uni<Void> save(User o) {
         String pwd = BCrypt.hashpw(o.getPassword(), BCrypt.gensalt());
-        return reactivePool.withConnection(con -> {
+        return reactivePool.withTransaction(con -> {
             return con.preparedQuery("insert into app_user (id, username, password, first_name, last_name, active) values(nextval('app_user_id_seq'),$1,$2,$3,$4,$5) returning id as app_user_id")
                     .execute(Tuple.of(o.getUsername(), pwd, o.getFirstName(), o.getLastName(), true))
                     .onItem().transformToUni(rowSet -> {
@@ -113,7 +113,7 @@ public class UserService {
     }
 
     public Uni<Void> update(User o) {
-        return reactivePool.withConnection(con -> {
+        return reactivePool.withTransaction(con -> {
             Uni<Void> u1;
 
             if (o.getPassword() != null && !o.getPassword().isEmpty()) {
@@ -132,8 +132,8 @@ public class UserService {
                     .replaceWithVoid();
 
             List<Uni<Void>> unis = o.getRoles().stream().map(r -> {
-                return con.preparedQuery("delete from app_user_roles where app_user_id = $1")
-                        .execute(Tuple.of(o.getId()))
+                return con.preparedQuery("insert into app_user_roles (app_user_id, roles_id) values($1,$2)")
+                        .execute(Tuple.of(o.getId(), r.getId()))
                         .replaceWithVoid();
             }).collect(Collectors.toList());
             Uni<Void> u3 = Uni.join().all(unis).andFailFast().replaceWithVoid();
@@ -143,13 +143,15 @@ public class UserService {
     }
 
     public Uni<Void> deleteById(Long id) {
-        Uni<Void> u1 = reactivePool.preparedQuery("delete from app_user_roles where app_user_id = $1")
-                .execute(Tuple.of(id))
-                .replaceWithVoid();
-        Uni<Void> u2 = reactivePool.preparedQuery("delete from app_user where id = $1")
-                .execute(Tuple.of(id))
-                .replaceWithVoid();
-        return u1.chain(() -> u2);
+        return reactivePool.withTransaction(con -> {
+            Uni<Void> u1 = reactivePool.preparedQuery("delete from app_user_roles where app_user_id = $1")
+                    .execute(Tuple.of(id))
+                    .replaceWithVoid();
+            Uni<Void> u2 = reactivePool.preparedQuery("delete from app_user where id = $1")
+                    .execute(Tuple.of(id))
+                    .replaceWithVoid();
+            return u1.chain(() -> u2);
+        });
     }
 
     public Uni<Void> updateLastLogin(Long id) {
