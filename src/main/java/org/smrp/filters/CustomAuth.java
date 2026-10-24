@@ -66,7 +66,7 @@ public class CustomAuth implements HttpAuthenticationMechanism {
         String username = (String) claims.get("username");
         SecurityIdentity identity = QuarkusSecurityIdentity.builder()
                 .setPrincipal(new QuarkusPrincipal(username))
-                .addAttribute("id", Long.parseLong(sub))
+                .addAttribute("id", Long.valueOf(sub))
                 .build();
         return Uni.createFrom().item(identity);
     }
