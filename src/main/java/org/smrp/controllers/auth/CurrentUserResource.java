@@ -45,7 +45,7 @@ public class CurrentUserResource {
                 return Uni.createFrom().failure(new NotFoundException("User not found"));
             }
 
-            HashMap<String, Object> mx = new HashMap<>();
+            Map<String, Object> mx = new LinkedHashMap<>();
             mx.put("id", user.getId());
             mx.put("username", user.getUsername());
             mx.put("first_name", user.getFirstName());
