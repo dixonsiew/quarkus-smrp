@@ -1,6 +1,7 @@
 package org.smrp.controllers.auth;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
