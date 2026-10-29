@@ -160,8 +160,8 @@ public class MasterPD301Resource extends Master {
                             }
                             Map<String, Object> data = new LinkedHashMap<>();
                             data.put("filename", filename);
-                            data.put("admissionFrom", datefrom);
-                            data.put("admissionTo", dateto);
+                            data.put("dischargeFrom", datefrom);
+                            data.put("dischargeTo", dateto);
                             data.put("refServiceTypeCode", "02");
                             data.put("facilityCode", facilityCode);
                             data.put("forms", forms);
@@ -287,8 +287,8 @@ public class MasterPD301Resource extends Master {
                             }
                             Map<String, Object> data = new LinkedHashMap<>();
                             data.put("filename", filename);
-                            data.put("admissionFrom", datefrom);
-                            data.put("admissionTo", dateto);
+                            data.put("dischargeFrom", datefrom);
+                            data.put("dischargeTo", dateto);
                             data.put("refServiceTypeCode", "01");
                             data.put("facilityCode", facilityCode);
                             data.put("forms", forms);
