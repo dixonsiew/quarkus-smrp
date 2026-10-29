@@ -6,6 +6,8 @@ import org.bson.Document;
 import org.smrp.services.ReportService;
 
 import io.smallrye.mutiny.Uni;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 
 public class Master {
@@ -14,6 +16,28 @@ public class Master {
 
     public Master(ReportService reportService) {
         this.reportService = reportService;
+    }
+
+    protected Response send(Map<String, Object> data, String filename) {
+        return Response.ok(data)
+                .header("Content-Disposition", "attachment; filename=" + filename)
+                .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                .header("Pragma", "no-cache")
+                .header("Expires", "0")
+                .header("filename", filename)
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .build();
+    }
+
+    protected Response send(byte[] data, String filename) {
+        return Response.ok(data)
+                .header("Content-Disposition", "attachment; filename=" + filename)
+                .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                .header("Pragma", "no-cache")
+                .header("Expires", "0")
+                .header("filename", filename)
+                .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                .build();
     }
     
     protected Uni<Map<String, String>> getData(Document doc) {

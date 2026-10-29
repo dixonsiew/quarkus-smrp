@@ -77,6 +77,17 @@ public class MasterPD101Resource extends Master {
         return col.find().collect().asList().flatMap(ls -> {
             return Uni.createFrom().item(ls)
                     .onItem().transformToUni(ignored -> {
+                        if (ls.isEmpty()) {
+                            Map<String, Object> data = new LinkedHashMap<>();
+                            data.put("filename", filename);
+                            data.put("admissionFrom", datefrom);
+                            data.put("admissionTo", dateto);
+                            data.put("refServiceTypeCode", "02");
+                            data.put("facilityCode", facilityCode);
+                            data.put("forms", List.of());
+                            return Uni.createFrom().item(send(data, filename));
+                        }
+
                         List<Document> lr = Utils.processDoc(ls);
                         List<Map<String, Object>> forms = new ArrayList<>();
                         List<Uni<Map<String, String>>> unis = lr.stream()
@@ -156,14 +167,7 @@ public class MasterPD101Resource extends Master {
                             data.put("refServiceTypeCode", "02");
                             data.put("facilityCode", facilityCode);
                             data.put("forms", forms);
-                            return Response.ok(data)
-                                    .header("Content-Disposition", "attachment; filename=" + filename)
-                                    .header("Cache-Control", "no-cache, no-store, must-revalidate")
-                                    .header("Pragma", "no-cache")
-                                    .header("Expires", "0")
-                                    .header("filename", filename)
-                                    .header("Content-Type", MediaType.APPLICATION_JSON)
-                                    .build();
+                            return send(data, filename);
                         });
                     }).runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
         });
@@ -190,6 +194,17 @@ public class MasterPD101Resource extends Master {
         return col.find().collect().asList().flatMap(ls -> {
             return Uni.createFrom().item(ls)
                     .onItem().transformToUni(ignored -> {
+                        if (ls.isEmpty()) {
+                            Map<String, Object> data = new LinkedHashMap<>();
+                            data.put("filename", filename);
+                            data.put("admissionFrom", datefrom);
+                            data.put("admissionTo", dateto);
+                            data.put("refServiceTypeCode", "01");
+                            data.put("facilityCode", facilityCode);
+                            data.put("forms", List.of());
+                            return Uni.createFrom().item(send(data, filename));
+                        }
+
                         List<Document> lr = Utils.processDoc(ls);
                         List<Map<String, Object>> forms = new ArrayList<>();
                         List<Uni<Map<String, String>>> unis = lr.stream()
@@ -276,14 +291,7 @@ public class MasterPD101Resource extends Master {
                             data.put("refServiceTypeCode", "01");
                             data.put("facilityCode", facilityCode);
                             data.put("forms", forms);
-                            return Response.ok(data)
-                                    .header("Content-Disposition", "attachment; filename=" + filename)
-                                    .header("Cache-Control", "no-cache, no-store, must-revalidate")
-                                    .header("Pragma", "no-cache")
-                                    .header("Expires", "0")
-                                    .header("filename", filename)
-                                    .header("Content-Type", MediaType.APPLICATION_JSON)
-                                    .build();
+                            return send(data, filename);
                         });
                     }).runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
         });
@@ -312,14 +320,7 @@ public class MasterPD101Resource extends Master {
                 try {
                     List<Document> lr = Utils.processDoc(ls);
                     byte[] bx = Utils.getXlsx(ColMap.COLUMN_MAP, lr);
-                    return Response.ok(bx)
-                            .header("Content-Disposition", "attachment; filename=" + filename)
-                            .header("Cache-Control", "no-cache, no-store, must-revalidate")
-                            .header("Pragma", "no-cache")
-                            .header("Expires", "0")
-                            .header("filename", filename)
-                            .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                            .build();
+                    return send(bx, filename);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
