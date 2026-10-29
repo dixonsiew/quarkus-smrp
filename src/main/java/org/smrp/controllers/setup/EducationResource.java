@@ -38,7 +38,7 @@ public class EducationResource {
     
     private final SecurityIdentity securityIdentity;
     private final CommonSetupService commonSetupService;
-    private final String table = "city";
+    private final String table = "education";
     
     public EducationResource(CommonSetupService commonSetupService, SecurityIdentity securityIdentity) {
         this.commonSetupService = commonSetupService;
