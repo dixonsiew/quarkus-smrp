@@ -163,8 +163,8 @@ public class MasterPD105Resource extends Master {
                             }
                             Map<String, Object> data = new LinkedHashMap<>();
                             data.put("filename", filename);
-                            data.put("birthDateFrom", datefrom);
-                            data.put("birthDateTo", dateto);
+                            data.put("deathDateFrom", datefrom);
+                            data.put("deathDateTo", dateto);
                             data.put("refServiceTypeCode", "01");
                             data.put("facilityCode", facilityCode);
                             data.put("forms", forms);

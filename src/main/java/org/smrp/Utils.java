@@ -118,7 +118,6 @@ public class Utils {
     public static byte[] getXlsx(List<ColumnMap> colmaps, List<Document> lx) throws Exception {
         Workbook wb = new XSSFWorkbook();
         ByteArrayOutputStream bx = new ByteArrayOutputStream();
-        System.out.println(lx.size());
 
         try {
             Sheet sh = wb.createSheet("Sheet1");
