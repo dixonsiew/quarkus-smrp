@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.smrp.services.ReportService;
 
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -38,6 +39,11 @@ public class Master {
                 .header("filename", filename)
                 .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 .build();
+    }
+
+    protected Uni<Response> sendDeferred(Map<String, Object> data, String filename) {
+        return Uni.createFrom().item(() -> send(data, filename))
+                .runSubscriptionOn(Infrastructure.getDefaultWorkerPool());
     }
     
     protected Uni<Map<String, String>> getData(Document doc) {
