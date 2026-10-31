@@ -1,0 +1,170 @@
+2026-10-31 18:19:39,211 ERROR [io.qua.dep.dev.JavaCompilationProvider] (vert.x-worker-thread-15) cannot find symbol
+  symbol:   variable map
+  location: class org.smrp.jobs.MainJob, line 58 in C:\Users\SIEW WING FEI\Desktop\quarkus-smrp\smrp\src\main\java\org\smrp\jobs\MainJob.java
+2026-10-31 18:19:39,218 ERROR [io.qua.mut.run.MutinyInfrastructure] (vert.x-eventloop-thread-0) Mutiny had to drop the following exception: io.vertx.core.json.DecodeException: Failed to decode:Unexpected character ('<' (code 60)): expected a valid value (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 1]
+	at io.quarkus.vertx.runtime.jackson.QuarkusJacksonJsonCodec.fromParser(QuarkusJacksonJsonCodec.java:148)
+	at io.quarkus.vertx.runtime.jackson.QuarkusJacksonJsonCodec.fromBuffer(QuarkusJacksonJsonCodec.java:120)
+	at io.vertx.core.json.Json.decodeValue(Json.java:119)
+	at io.vertx.core.json.Json.decodeValue(Json.java:107)
+	at io.vertx.ext.web.codec.impl.BodyCodecImpl.lambda$static$1(BodyCodecImpl.java:41)
+	at io.vertx.ext.web.client.HttpResponse.bodyAsJsonObject(HttpResponse.java:113)
+	at io.vertx.mutiny.ext.web.client.HttpResponse.bodyAsJsonObject(HttpResponse.java:213)
+	at org.smrp.jobs.MainJob.lambda$executeEveryTen$1(MainJob.java:56)
+	at io.smallrye.context.impl.wrappers.SlowContextualFunction.apply(SlowContextualFunction.java:21)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransform$UniOnItemTransformProcessor.onItem(UniOnItemTransform.java:36)
+	at io.smallrye.mutiny.vertx.AsyncResultUni.lambda$subscribe$1(AsyncResultUni.java:35)
+	at io.smallrye.mutiny.vertx.DelegatingHandler.handle(DelegatingHandler.java:25)
+	at io.vertx.ext.web.client.impl.HttpContext.handleDispatchResponse(HttpContext.java:403)
+	at io.vertx.ext.web.client.impl.HttpContext.execute(HttpContext.java:385)
+	at io.vertx.ext.web.client.impl.HttpContext.next(HttpContext.java:363)
+	at io.vertx.ext.web.client.impl.HttpContext.fire(HttpContext.java:330)
+	at io.vertx.ext.web.client.impl.HttpContext.dispatchResponse(HttpContext.java:292)
+	at io.vertx.ext.web.client.impl.HttpContext.lambda$null$6(HttpContext.java:514)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.impl.ContextInternal.lambda$runOnContext$0(ContextInternal.java:50)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:566)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:1007)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: com.fasterxml.jackson.core.JsonParseException: Unexpected character ('<' (code 60)): expected a valid value (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 1]
+	at com.fasterxml.jackson.core.JsonParser._constructReadException(JsonParser.java:2675)
+	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportUnexpectedChar(ParserMinimalBase.java:743)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._handleUnexpectedValue(UTF8StreamJsonParser.java:2849)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._nextTokenNotInObject(UTF8StreamJsonParser.java:867)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser.nextToken(UTF8StreamJsonParser.java:753)
+	at com.fasterxml.jackson.databind.ObjectMapper._initForReading(ObjectMapper.java:5139)
+	at com.fasterxml.jackson.databind.ObjectMapper._readValue(ObjectMapper.java:5012)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3104)
+	at io.quarkus.vertx.runtime.jackson.QuarkusJacksonJsonCodec.fromParser(QuarkusJacksonJsonCodec.java:145)
+	... 28 more
+
+2026-10-31 18:19:49,207 ERROR [io.qua.dep.dev.JavaCompilationProvider] (vert.x-worker-thread-15) method map in interface io.smallrye.mutiny.Uni<T> cannot be applied to given types;
+  required: java.util.function.Function<? super io.vertx.mutiny.ext.web.client.HttpResponse<io.vertx.mutiny.core.buffer.Buffer>,? extends O>
+  found:    (res)->{ i[...]; } }
+  reason: cannot infer type-variable(s) O
+    (argument mismatch; bad return type in lambda expression
+      missing return value), line 52 in C:\Users\SIEW WING FEI\Desktop\quarkus-smrp\smrp\src\main\java\org\smrp\jobs\MainJob.java
+2026-10-31 18:19:49,213 ERROR [io.qua.mut.run.MutinyInfrastructure] (vert.x-eventloop-thread-0) Mutiny had to drop the following exception: java.lang.RuntimeException: Failed with status code: 500
+	at org.smrp.jobs.MainJob.lambda$executeEveryTen$0(MainJob.java:45)
+	at io.smallrye.context.impl.wrappers.SlowContextualFunction.apply(SlowContextualFunction.java:21)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransform$UniOnItemTransformProcessor.onItem(UniOnItemTransform.java:36)
+	at io.smallrye.mutiny.vertx.AsyncResultUni.lambda$subscribe$1(AsyncResultUni.java:35)
+	at io.smallrye.mutiny.vertx.DelegatingHandler.handle(DelegatingHandler.java:25)
+	at io.vertx.ext.web.client.impl.HttpContext.handleDispatchResponse(HttpContext.java:403)
+	at io.vertx.ext.web.client.impl.HttpContext.execute(HttpContext.java:385)
+	at io.vertx.ext.web.client.impl.HttpContext.next(HttpContext.java:363)
+	at io.vertx.ext.web.client.impl.HttpContext.fire(HttpContext.java:330)
+	at io.vertx.ext.web.client.impl.HttpContext.dispatchResponse(HttpContext.java:292)
+	at io.vertx.ext.web.client.impl.HttpContext.lambda$null$6(HttpContext.java:514)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.impl.ContextInternal.lambda$runOnContext$0(ContextInternal.java:50)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:566)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:1007)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+
+2026-10-31 18:19:59,167 ERROR [io.qua.dep.dev.JavaCompilationProvider] (vert.x-worker-thread-15) lambda body is neither value nor void compatible, line 52 in C:\Users\SIEW WING FEI\Desktop\quarkus-smrp\smrp\src\main\java\org\smrp\jobs\MainJob.java
+2026-10-31 18:19:59,168 ERROR [io.qua.dep.dev.JavaCompilationProvider] (vert.x-worker-thread-15) method map in interface io.smallrye.mutiny.Uni<T> cannot be applied to given types;
+  required: java.util.function.Function<? super io.vertx.mutiny.ext.web.client.HttpResponse<io.vertx.mutiny.core.buffer.Buffer>,? extends O>
+  found:    (res)->{ i[...]; } }
+  reason: cannot infer type-variable(s) O
+    (argument mismatch; bad return type in lambda expression
+      missing return value), line 52 in C:\Users\SIEW WING FEI\Desktop\quarkus-smrp\smrp\src\main\java\org\smrp\jobs\MainJob.java
+2026-10-31 18:19:59,175 ERROR [io.qua.mut.run.MutinyInfrastructure] (vert.x-eventloop-thread-0) Mutiny had to drop the following exception: java.lang.RuntimeException: Failed with status code: 500
+	at org.smrp.jobs.MainJob.lambda$executeEveryTen$0(MainJob.java:45)
+	at io.smallrye.context.impl.wrappers.SlowContextualFunction.apply(SlowContextualFunction.java:21)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransform$UniOnItemTransformProcessor.onItem(UniOnItemTransform.java:36)
+	at io.smallrye.mutiny.vertx.AsyncResultUni.lambda$subscribe$1(AsyncResultUni.java:35)
+	at io.smallrye.mutiny.vertx.DelegatingHandler.handle(DelegatingHandler.java:25)
+	at io.vertx.ext.web.client.impl.HttpContext.handleDispatchResponse(HttpContext.java:403)
+	at io.vertx.ext.web.client.impl.HttpContext.execute(HttpContext.java:385)
+	at io.vertx.ext.web.client.impl.HttpContext.next(HttpContext.java:363)
+	at io.vertx.ext.web.client.impl.HttpContext.fire(HttpContext.java:330)
+	at io.vertx.ext.web.client.impl.HttpContext.dispatchResponse(HttpContext.java:292)
+	at io.vertx.ext.web.client.impl.HttpContext.lambda$null$6(HttpContext.java:514)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.impl.ContextInternal.lambda$runOnContext$0(ContextInternal.java:50)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:566)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:1007)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+
+2026-10-31 18:20:09,166 ERROR [io.qua.dep.dev.JavaCompilationProvider] (vert.x-worker-thread-15) lambda body is neither value nor void compatible, line 52 in C:\Users\SIEW WING FEI\Desktop\quarkus-smrp\smrp\src\main\java\org\smrp\jobs\MainJob.java
+2026-10-31 18:20:09,166 ERROR [io.qua.dep.dev.JavaCompilationProvider] (vert.x-worker-thread-15) method map in interface io.smallrye.mutiny.Uni<T> cannot be applied to given types;
+  required: java.util.function.Function<? super io.vertx.mutiny.ext.web.client.HttpResponse<io.vertx.mutiny.core.buffer.Buffer>,? extends O>
+  found:    (res)->{ i[...]{ } }
+  reason: cannot infer type-variable(s) O
+    (argument mismatch; bad return type in lambda expression
+      missing return value), line 52 in C:\Users\SIEW WING FEI\Desktop\quarkus-smrp\smrp\src\main\java\org\smrp\jobs\MainJob.java
+2026-10-31 18:20:09,172 ERROR [io.qua.mut.run.MutinyInfrastructure] (vert.x-eventloop-thread-0) Mutiny had to drop the following exception: java.lang.RuntimeException: Failed with status code: 500
+	at org.smrp.jobs.MainJob.lambda$executeEveryTen$0(MainJob.java:45)
+	at io.smallrye.context.impl.wrappers.SlowContextualFunction.apply(SlowContextualFunction.java:21)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransform$UniOnItemTransformProcessor.onItem(UniOnItemTransform.java:36)
+	at io.smallrye.mutiny.vertx.AsyncResultUni.lambda$subscribe$1(AsyncResultUni.java:35)
+	at io.smallrye.mutiny.vertx.DelegatingHandler.handle(DelegatingHandler.java:25)
+	at io.vertx.ext.web.client.impl.HttpContext.handleDispatchResponse(HttpContext.java:403)
+	at io.vertx.ext.web.client.impl.HttpContext.execute(HttpContext.java:385)
+	at io.vertx.ext.web.client.impl.HttpContext.next(HttpContext.java:363)
+	at io.vertx.ext.web.client.impl.HttpContext.fire(HttpContext.java:330)
+	at io.vertx.ext.web.client.impl.HttpContext.dispatchResponse(HttpContext.java:292)
+	at io.vertx.ext.web.client.impl.HttpContext.lambda$null$6(HttpContext.java:514)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.impl.ContextInternal.lambda$runOnContext$0(ContextInternal.java:50)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:566)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:1007)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+
+2026-10-31 18:20:19,157 ERROR [io.qua.dep.dev.JavaCompilationProvider] (vert.x-worker-thread-15) lambda body is neither value nor void compatible, line 52 in C:\Users\SIEW WING FEI\Desktop\quarkus-smrp\smrp\src\main\java\org\smrp\jobs\MainJob.java
+2026-10-31 18:20:19,157 ERROR [io.qua.dep.dev.JavaCompilationProvider] (vert.x-worker-thread-15) method map in interface io.smallrye.mutiny.Uni<T> cannot be applied to given types;
+  required: java.util.function.Function<? super io.vertx.mutiny.ext.web.client.HttpResponse<io.vertx.mutiny.core.buffer.Buffer>,? extends O>
+  found:    (res)->{ i[...]{ } }
+  reason: cannot infer type-variable(s) O
+    (argument mismatch; bad return type in lambda expression
+      missing return value), line 52 in C:\Users\SIEW WING FEI\Desktop\quarkus-smrp\smrp\src\main\java\org\smrp\jobs\MainJob.java
+2026-10-31 18:20:19,163 ERROR [io.qua.mut.run.MutinyInfrastructure] (vert.x-eventloop-thread-0) Mutiny had to drop the following exception: java.lang.RuntimeException: Failed with status code: 500
+	at org.smrp.jobs.MainJob.lambda$executeEveryTen$0(MainJob.java:45)
+	at io.smallrye.context.impl.wrappers.SlowContextualFunction.apply(SlowContextualFunction.java:21)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransform$UniOnItemTransformProcessor.onItem(UniOnItemTransform.java:36)
+	at io.smallrye.mutiny.vertx.AsyncResultUni.lambda$subscribe$1(AsyncResultUni.java:35)
+	at io.smallrye.mutiny.vertx.DelegatingHandler.handle(DelegatingHandler.java:25)
+	at io.vertx.ext.web.client.impl.HttpContext.handleDispatchResponse(HttpContext.java:403)
+	at io.vertx.ext.web.client.impl.HttpContext.execute(HttpContext.java:385)
+	at io.vertx.ext.web.client.impl.HttpContext.next(HttpContext.java:363)
+	at io.vertx.ext.web.client.impl.HttpContext.fire(HttpContext.java:330)
+	at io.vertx.ext.web.client.impl.HttpContext.dispatchResponse(HttpContext.java:292)
+	at io.vertx.ext.web.client.impl.HttpContext.lambda$null$6(HttpContext.java:514)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.impl.ContextInternal.lambda$runOnContext$0(ContextInternal.java:50)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:566)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:1007)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+
