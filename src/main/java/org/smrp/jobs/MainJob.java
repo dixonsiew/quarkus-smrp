@@ -27,9 +27,9 @@ public class MainJob {
         this.webClient = WebClient.create(vertx, options);
     }
 
-    @Scheduled(every = "10s")
+    @Scheduled(every = "60s")
     void executeEveryTen() {
-        Log.infof("Simple Job every 10 seconds: %s", new SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(new Date()));
+        Log.infof("Simple Job every 60 seconds: %s", new SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(new Date()));
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("username", "admin");
         m.put("password", "admin123");
