@@ -29,12 +29,18 @@ import jakarta.xml.bind.Unmarshaller;
 public class SoapResource {
     
     private final WebClient webClient;
+    private final JAXBContext context;
 
     public SoapResource(Vertx vertx) {
         WebClientOptions options = new WebClientOptions()
                 .setMaxPoolSize(50)
                 .setConnectTimeout(5000);
         this.webClient = WebClient.create(vertx, options);
+        try {
+            this.context = JAXBContext.newInstance(SoapEnvelope.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create JAXBContext", e);
+        }
     }
 
     @APIResponse(
@@ -63,9 +69,7 @@ public class SoapResource {
             .sendBuffer(Buffer.buffer(s))
             .onItem().transform(HttpResponse::bodyAsString);
         return data.flatMap(m -> {
-            JAXBContext context;
             try {
-                context = JAXBContext.newInstance(SoapEnvelope.class);
                 Unmarshaller unmarshaller = context.createUnmarshaller();
                 SoapEnvelope envelope = (SoapEnvelope) unmarshaller.unmarshal(new StringReader(m));
                 List<CountryCodeAndName> result = envelope.getBody()
