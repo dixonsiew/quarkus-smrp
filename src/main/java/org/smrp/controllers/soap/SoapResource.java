@@ -1,5 +1,8 @@
 package org.smrp.controllers.soap;
 
+import java.io.StringReader;
+import java.util.List;
+
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import io.smallrye.mutiny.Uni;
@@ -14,6 +17,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 
 
 @Tag(name = "Soap")
@@ -31,7 +36,7 @@ public class SoapResource {
 
     @GET
     @Path("/countries")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> getCountries() {
         String s = """
             <x:Envelope
@@ -49,7 +54,19 @@ public class SoapResource {
             .sendBuffer(Buffer.buffer(s))
             .onItem().transform(HttpResponse::bodyAsString);
         return data.flatMap(m -> {
-            return Uni.createFrom().item(Response.ok(m).build());
+            JAXBContext context;
+            try {
+                context = JAXBContext.newInstance(SoapEnvelope.class);
+                Unmarshaller unmarshaller = context.createUnmarshaller();
+                SoapEnvelope envelope = (SoapEnvelope) unmarshaller.unmarshal(new StringReader(m));
+                List<CountryCodeAndName> result = envelope.getBody()
+                    .getListOfCountryNamesByNameResponse()
+                    .getListOfCountryNamesByNameResult()
+                    .getCountryCodeAndNames();
+                return Uni.createFrom().item(Response.ok(result).build());
+            } catch (Exception e) {
+                return Uni.createFrom().failure(e);
+            }
         });
     }
 }
