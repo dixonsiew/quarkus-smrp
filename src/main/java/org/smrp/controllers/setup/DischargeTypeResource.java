@@ -3,6 +3,9 @@ package org.smrp.controllers.setup;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.smrp.Constants;
@@ -54,6 +57,12 @@ public class DischargeTypeResource {
         return commonSetupService.findAll(table, 0, 0, "", "");
     }
 
+    @APIResponse(
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = CommonSetup[].class) // Key: use array class
+        )
+    )
     @GET
     @Path("/discharge-types")
     @Produces(MediaType.APPLICATION_JSON)
@@ -88,6 +97,12 @@ public class DischargeTypeResource {
         });
     }
 
+    @APIResponse(
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = CommonSetup[].class) // Key: use array class
+        )
+    )
     @POST
     @Path("/discharge-types")
     @Produces(MediaType.APPLICATION_JSON)

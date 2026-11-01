@@ -3,6 +3,9 @@ package org.smrp.controllers.soap;
 import java.io.StringReader;
 import java.util.List;
 
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import io.smallrye.mutiny.Uni;
@@ -34,6 +37,12 @@ public class SoapResource {
         this.webClient = WebClient.create(vertx, options);
     }
 
+    @APIResponse(
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = CountryCodeAndName[].class) // Key: use array class
+        )
+    )
     @GET
     @Path("/countries")
     @Produces(MediaType.APPLICATION_JSON)

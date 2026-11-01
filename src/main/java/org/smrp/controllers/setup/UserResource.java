@@ -3,12 +3,16 @@ package org.smrp.controllers.setup;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.smrp.Constants;
 import org.smrp.dtos.KeywordDto;
 import org.smrp.dtos.UserDto;
 import org.smrp.filters.Auth;
+import org.smrp.models.CommonSetup;
 import org.smrp.models.Pager;
 import org.smrp.models.User;
 import org.smrp.services.RoleService;
@@ -45,6 +49,12 @@ public class UserResource {
         this.userService = userService;
     }
 
+    @APIResponse(
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = CommonSetup[].class) // Key: use array class
+        )
+    )
     @GET
     @Path("/users")
     @Produces(MediaType.APPLICATION_JSON)
@@ -79,6 +89,12 @@ public class UserResource {
         });
     }
 
+    @APIResponse(
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = CommonSetup[].class) // Key: use array class
+        )
+    )
     @POST
     @Path("/users")
     @Produces(MediaType.APPLICATION_JSON)
