@@ -28,7 +28,7 @@ public class MainJob {
     }
 
     @Scheduled(every = "60s")
-    void executeEveryTen() {
+    void executeEverySixtySeconds() {
         Log.infof("Simple Job every 60 seconds: %s", new SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(new Date()));
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("username", "admin");
