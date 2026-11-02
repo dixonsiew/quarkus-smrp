@@ -3,8 +3,8 @@ package org.smrp.controllers.redis.models;
 
 public class Increment {
     
-    public String key;
-    public long value;
+    private String key;
+    private long value;
 
     public Increment(String key, long value) {
         this.key = key;
@@ -12,4 +12,20 @@ public class Increment {
     }
     
     public Increment() {}
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public long getValue() {
+        return value;
+    }
+
+    public void setValue(long value) {
+        this.value = value;
+    }
 }

@@ -32,7 +32,7 @@ public class RedisResource {
 
     @POST
     public Uni<Void> create(Increment increment) {
-        return incrementService.set(increment.key, increment.value);
+        return incrementService.set(increment.getKey(), increment.getValue());
     }
 
     @GET
