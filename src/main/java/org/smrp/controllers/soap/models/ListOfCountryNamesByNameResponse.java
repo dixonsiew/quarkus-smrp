@@ -1,4 +1,4 @@
-package org.smrp.controllers.soap;
+package org.smrp.controllers.soap.models;
 
 import jakarta.xml.bind.annotation.*;
 
