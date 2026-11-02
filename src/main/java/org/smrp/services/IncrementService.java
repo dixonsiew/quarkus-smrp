@@ -34,8 +34,8 @@ public class IncrementService {
         return countCommands.incrby(key, incrementBy).replaceWithVoid();
     }
 
-    public Uni<Integer> del(String key) {
-        return keyCommands.del(key);
+    public Uni<Void> del(String key) {
+        return keyCommands.del(key).replaceWithVoid();
     }
 
     public Uni<List<String>> keys() {

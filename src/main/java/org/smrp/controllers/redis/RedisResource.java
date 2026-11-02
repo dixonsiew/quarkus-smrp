@@ -49,7 +49,7 @@ public class RedisResource {
 
     @DELETE
     @Path("/{key}")
-    public Uni<Integer> delete(@PathParam("key") String key) {
+    public Uni<Void> delete(@PathParam("key") String key) {
         return incrementService.del(key);
     }
 }
