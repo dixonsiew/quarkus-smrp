@@ -1,5 +1,6 @@
 package org.smrp.controllers.redis.models;
 
+
 public class Increment {
     
     public String key;
