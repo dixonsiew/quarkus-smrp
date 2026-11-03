@@ -84,6 +84,10 @@ FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.24
 
 ENV LANGUAGE='en_US:en'
 
+USER root
+RUN mkdir -p /deployments/logs && chown -R 185:0 /deployments/logs && chmod -R 770 /deployments/logs
+USER 185
+
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
 COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
