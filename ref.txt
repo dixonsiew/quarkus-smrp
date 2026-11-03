@@ -2,3 +2,5 @@ http://192.168.68.55:8300/smrp/q/swagger-ui
 
 docker build -f src/main/docker/Dockerfile.jvm -t quarkus/smrp-jvm .
 docker run -i --rm -p 8300:8300 quarkus/smrp-jvm
+
+& minikube -p minikube docker-env  | Invoke-Expression
