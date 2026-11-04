@@ -7,4 +7,4 @@ docker run -i --rm -p 8300:8300 quarkus/smrp-jvm
 .\mvnw clean package "-Dquarkus.profile=minikube"
 
 [kubernetes cluster]
-.\mvnw clean package "-Dquarkus.profile=kubernetes" "-Dquarkus.container-image.build=true" "-Dquarkus.container-image.push=true" "-Dquarkus.kubernetes.deploy=true"
+.\mvnw clean package "-Dquarkus.profile=kubernetes" "-Dquarkus.container-image.build=true" "-Dquarkus.kubernetes.deploy=true"
