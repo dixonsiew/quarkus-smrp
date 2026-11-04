@@ -52,11 +52,4 @@ public class SoapResource {
     public Uni<Response> getContinents() {
         return soapService.getContinents();
     }
-
-    @GET
-    @Path("/numberToWords/{number}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Uni<Response> numberToWords(@PathParam("number") String number) {
-        return soapService.getNumberToWords(number);
-    }
 }

@@ -31,7 +31,9 @@ public class SoapService {
 
     public SoapService(Vertx vertx) {
         WebClientOptions options = new WebClientOptions()
-                .setKeepAlive(false)
+                .setKeepAlive(true)
+                .setIdleTimeout(30)
+                .setPoolCleanerPeriod(5)
                 .setMaxPoolSize(50)
                 .setConnectTimeout(10000);
         this.webClient = WebClient.create(vertx, options);
@@ -103,44 +105,6 @@ public class SoapService {
             } catch (Exception e) {
                 return Uni.createFrom().failure(e);
             }
-        });
-    }
-
-    public Uni<Response> getNumberToWords(String number) {
-        String s = """
-            <x:Envelope
-                xmlns:x="http://schemas.xmlsoap.org/soap/envelope/"
-                xmlns:web="http://www.dataaccess.com/webservicesserver/">
-                <x:Header/>
-                <x:Body>
-                    <web:NumberToWords>
-                        <web:ubiNum>%s</web:ubiNum>
-                    </web:NumberToWords>
-                </x:Body>
-            </x:Envelope>
-        """.formatted(number);
-        Uni<String> data = webClient.postAbs("http://www.dataaccess.com/webservicesserver/numberconversion.wso")
-            .putHeader("Content-Type", "text/xml; charset=utf-8")
-            .putHeader("SOAPAction", "")
-            .sendBuffer(Buffer.buffer(s))
-            .onItem().transform(HttpResponse::bodyAsString);
-        return data.flatMap(m -> {
-            try {
-                System.out.println("Response: " + m);
-                Unmarshaller unmarshaller = contextNumberToWords.createUnmarshaller();
-                SoapN2WEnvelope envelope = (SoapN2WEnvelope) unmarshaller.unmarshal(new StringReader(m));
-                String result = envelope.getBody()
-                    .getNumberToWordsResponse()
-                    .getNumberToWordsResult();
-                return Uni.createFrom().item(Response.ok(result).build());
-            } catch (Exception e) {
-                return Uni.createFrom().failure(e);
-            }
-        }).onFailure().recoverWithItem(e -> {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("Error processing SOAP request: " + e.getMessage())
-                .build();
         });
     }
 }
