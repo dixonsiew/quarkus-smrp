@@ -4,7 +4,7 @@ docker build -f src/main/docker/Dockerfile.jvm -t quarkus/smrp-jvm .
 docker run -i --rm -p 8300:8300 quarkus/smrp-jvm
 
 & minikube -p minikube docker-env  | Invoke-Expression
-.\mvnw clean package "-Dquarkus.profile=minikube"
+.\mvnw clean package "-Dquarkus.profile=minikube" "-Dquarkus.kubernetes.deploy=true"
 
 [kubernetes cluster]
 .\mvnw clean package "-Dquarkus.profile=kubernetes" "-Dquarkus.container-image.build=true" "-Dquarkus.kubernetes.deploy=true"
