@@ -7,7 +7,6 @@ import org.smrp.controllers.soap.models.Continent;
 import org.smrp.controllers.soap.models.CountryCodeAndName;
 import org.smrp.controllers.soap.models.SoapCCNEnvelope;
 import org.smrp.controllers.soap.models.SoapContinentEnvelope;
-import org.smrp.controllers.soap.models.SoapN2WEnvelope;
 
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.web.client.WebClientOptions;
@@ -27,7 +26,6 @@ public class SoapService {
     private final WebClient webClient;
     private final JAXBContext contextCCN;
     private final JAXBContext contextContinent;
-    private final JAXBContext contextNumberToWords;
 
     public SoapService(Vertx vertx) {
         WebClientOptions options = new WebClientOptions()
@@ -40,7 +38,6 @@ public class SoapService {
         try {
             this.contextCCN = JAXBContext.newInstance(SoapCCNEnvelope.class);
             this.contextContinent = JAXBContext.newInstance(SoapContinentEnvelope.class);
-            this.contextNumberToWords = JAXBContext.newInstance(SoapN2WEnvelope.class);
         } catch (Exception e) {
             throw new RuntimeException("Failed to create JAXBContext", e);
         }
