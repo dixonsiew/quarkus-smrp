@@ -14,3 +14,5 @@ kubectl config get-contexts
 
 [Switch context to Minikube]
 kubectl config use-context minikube
+
+kubectl port-forward pod/smrp-f4f9df568-kskbr 8300:8300
