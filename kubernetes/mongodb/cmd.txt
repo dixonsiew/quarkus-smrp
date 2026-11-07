@@ -1,0 +1,22 @@
+kubectl apply -f mongodb-statefulset.yaml
+
+kubectl get pods -w
+
+kubectl get pods -l app=mongodb
+
+kubectl port-forward svc/mongodb-service 27017:27017
+
+kubectl delete pods mongodb-0 --grace-period=0 --force
+
+kubectl get deployment,replicaset,statefulset
+
+----
+
+kubectl scale deployment smrp --replicas=0
+kubectl scale deployment mongodb-deployment --replicas=0
+
+kubectl scale statefulset mongodb --replicas=0
+
+kubectl scale statefulset mongodb --replicas=0
+
+kubectl delete pvc mongo-pvc

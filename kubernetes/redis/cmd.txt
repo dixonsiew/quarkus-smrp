@@ -1,0 +1,13 @@
+kubectl apply -f redis-statefulset.yaml
+
+kubectl get pods -l app=redis
+kubectl get svc redis-service
+
+kubectl port-forward svc/redis-service 6379:6379
+
+----
+
+kubectl scale deployment smrp --replicas=0
+kubectl scale deployment mongodb-deployment --replicas=0
+
+kubectl scale statefulset mongodb --replicas=0

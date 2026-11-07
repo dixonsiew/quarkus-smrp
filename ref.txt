@@ -16,3 +16,16 @@ kubectl config get-contexts
 kubectl config use-context minikube
 
 kubectl port-forward pod/smrp-f4f9df568-kskbr 8300:8300
+
+[deploy to kubernetes]
+.\mvnw clean package
+
+docker push wfsiew888/quarkus-smrp:1.0
+
+kubectl apply -f target/kubernetes/kubernetes.yml
+
+kubectl get deployments
+kubectl get pods
+kubectl get services
+
+kubectl port-forward pod/smrp-6468849fd5-66qtk 8300:8300
