@@ -15,10 +15,8 @@ kubectl config get-contexts
 [Switch context to Minikube]
 kubectl config use-context minikube
 
-kubectl port-forward pod/smrp-f4f9df568-kskbr 8300:8300
-
 [deploy to kubernetes]
-.\mvnw clean package
+.\mvnw clean package "-DskipTests"
 
 docker push wfsiew888/quarkus-smrp:1.0
 
@@ -28,4 +26,8 @@ kubectl get deployments
 kubectl get pods
 kubectl get services
 
-kubectl port-forward pod/smrp-6468849fd5-66qtk 8300:8300
+kubectl port-forward pod/smrp-cfd9cc4d5-8sjd4 8300:8300
+
+kubectl exec -it smrp-788d86466f-qvgsz -- env | grep -i quarkus
+
+kubectl logs smrp-788d86466f-qvgsz | grep -A 30 -B 5 "906e881d-a938-492f-bb90-bee21597c608-3"

@@ -4,7 +4,7 @@ kubectl get pods -w
 
 kubectl get pods -l app=mongodb
 
-kubectl port-forward svc/mongodb-service 27017:27017
+kubectl port-forward svc/mongodb-service 27017:27017 --address='0.0.0.0'
 
 kubectl delete pods mongodb-0 --grace-period=0 --force
 
