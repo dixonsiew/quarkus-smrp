@@ -26,6 +26,8 @@ kubectl get deployments
 kubectl get pods
 kubectl get services
 
+kubectl port-forward service/smrp 8300:80
+
 kubectl port-forward pod/smrp-cfd9cc4d5-8sjd4 8300:8300
 
 kubectl exec -it smrp-788d86466f-qvgsz -- env | grep -i quarkus
