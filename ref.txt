@@ -20,6 +20,7 @@ kubectl config use-context minikube
 
 docker push wfsiew888/quarkus-smrp:1.0.1
 
+kubectl delete deployment smrp
 kubectl apply -f target/kubernetes/kubernetes.yml
 
 kubectl get deployments

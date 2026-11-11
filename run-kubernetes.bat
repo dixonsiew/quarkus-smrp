@@ -1,0 +1,1 @@
+kubectl port-forward service/smrp 8300:80 --address='0.0.0.0'
