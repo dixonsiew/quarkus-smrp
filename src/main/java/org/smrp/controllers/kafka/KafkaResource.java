@@ -26,7 +26,7 @@ public class KafkaResource {
     private final Multi<Quote> quotes;
 
     public KafkaResource(
-        @Channel("prices-out") Emitter<Double> priceEmitter, 
+        @Channel("market-prices") Emitter<Double> priceEmitter, 
         @Channel("quote-requests") Emitter<String> quoteRequestEmitter,
         @Channel("quotes") Multi<Quote> quotes
     ) {

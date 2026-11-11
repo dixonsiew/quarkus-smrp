@@ -3,3 +3,21 @@ kubectl apply -f kafka-statefulset.yaml
 kubectl port-forward svc/kafka-service 9092:9092 --address='0.0.0.0'
 
 kubectl port-forward svc/kafka-ui-service 8080:8080 --address='0.0.0.0'
+
+kubectl port-forward svc/kafka-service 9093:9093 --address='0.0.0.0'
+
+---
+
+kubectl delete service kafka-ui-service 
+
+kubectl delete service kafka-service 
+
+kubectl delete statefulset kafka-ui 
+
+kubectl delete deployment kafka-ui  
+
+kubectl delete pod kafka-0
+
+kubectl scale deployment kafka --replicas=0
+
+kubectl delete statefulset kafka

@@ -7,6 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import io.quarkus.logging.Log;
 import io.vertx.mutiny.core.Vertx;
@@ -19,12 +23,21 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class MainJob {
 
     private final WebClient webClient;
+    private final Emitter<String> quoteRequestEmitter;
 
-    public MainJob(Vertx vertx) {
+    public MainJob(Vertx vertx, @Channel("quote-requests") Emitter<String> quoteRequestEmitter) {
         WebClientOptions options = new WebClientOptions()
                 .setMaxPoolSize(50)
                 .setConnectTimeout(5000);
         this.webClient = WebClient.create(vertx, options);
+        this.quoteRequestEmitter = quoteRequestEmitter;
+    }
+
+    @Scheduled(every = "10s")
+    void executeEveryTenSeconds() {
+        UUID uuid = UUID.randomUUID();
+        Log.infof("Sending quote request with UUID: %s", uuid.toString());
+        quoteRequestEmitter.send(uuid.toString()); 
     }
 
     @Scheduled(every = "60s")
