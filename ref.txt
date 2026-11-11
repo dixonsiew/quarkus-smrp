@@ -18,7 +18,7 @@ kubectl config use-context minikube
 [deploy to kubernetes]
 .\mvnw clean package "-DskipTests"
 
-docker push wfsiew888/quarkus-smrp:1.0
+docker push wfsiew888/quarkus-smrp:1.0.1
 
 kubectl apply -f target/kubernetes/kubernetes.yml
 
@@ -33,3 +33,5 @@ kubectl port-forward pod/smrp-cfd9cc4d5-8sjd4 8300:8300
 kubectl exec -it smrp-788d86466f-qvgsz -- env | grep -i quarkus
 
 kubectl logs smrp-788d86466f-qvgsz | grep -A 30 -B 5 "906e881d-a938-492f-bb90-bee21597c608-3"
+
+kubectl scale deployment smrp --replicas=0
