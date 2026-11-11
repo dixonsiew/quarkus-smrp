@@ -1,0 +1,1 @@
+kubectl port-forward svc/postgres-service 5432:5432 --address='0.0.0.0'
