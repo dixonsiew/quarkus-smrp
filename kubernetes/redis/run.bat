@@ -1,1 +1,1 @@
-kubectl port-forward svc/redis-service 6379:6379 --address='0.0.0.0'
+kubectl port-forward svc/redis-service 6379:6379 --address="0.0.0.0"

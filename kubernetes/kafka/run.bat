@@ -1,1 +1,1 @@
-kubectl port-forward svc/kafka-service 9092:9092 --address='0.0.0.0'
+kubectl port-forward svc/kafka-service 9092:9092 --address="0.0.0.0"

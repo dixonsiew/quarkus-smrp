@@ -1,1 +1,1 @@
-kubectl port-forward svc/mongodb-service 27017:27017 --address='0.0.0.0'
+kubectl port-forward svc/mongodb-service 27017:27017 --address="0.0.0.0"
