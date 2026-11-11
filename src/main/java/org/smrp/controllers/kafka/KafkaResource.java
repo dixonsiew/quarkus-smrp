@@ -27,7 +27,7 @@ public class KafkaResource {
 
     public KafkaResource(
         @Channel("market-prices") Emitter<Double> priceEmitter, 
-        @Channel("quote-requests") Emitter<String> quoteRequestEmitter,
+        @Channel("quote-requests-quarkus") Emitter<String> quoteRequestEmitter,
         @Channel("quotes") Multi<Quote> quotes
     ) {
         this.priceEmitter = priceEmitter;

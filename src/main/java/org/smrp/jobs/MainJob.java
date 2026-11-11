@@ -25,7 +25,7 @@ public class MainJob {
     private final WebClient webClient;
     private final Emitter<String> quoteRequestEmitter;
 
-    public MainJob(Vertx vertx, @Channel("quote-requests") Emitter<String> quoteRequestEmitter) {
+    public MainJob(Vertx vertx, @Channel("quote-requests-quarkus") Emitter<String> quoteRequestEmitter) {
         WebClientOptions options = new WebClientOptions()
                 .setMaxPoolSize(50)
                 .setConnectTimeout(5000);
