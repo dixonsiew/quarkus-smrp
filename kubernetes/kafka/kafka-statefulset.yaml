@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
       - name: kafka
-        image: apache/kafka:4.2.2
+        image: apache/kafka:4.4.0
         ports:
         - containerPort: 9092
           name: broker
