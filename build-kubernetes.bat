@@ -1,6 +1,10 @@
 kubectl delete service smrp-quarkus
 kubectl delete deployment smrp-quarkus
 
-mvnw clean package "-Dquarkus.profile=kubernetes" "-Dquarkus.container-image.build=true" "-Dquarkus.kubernetes.deploy=true"
+mvnw clean package
 
-@REM  kubectl apply -f target/kubernetes/kubernetes.yml
+docker build -f src/main/docker/Dockerfile.jvm -t docker.io/wfsiew888/smrp-quarkus:1.0.0 .
+
+docker push docker.io/wfsiew888/smrp-quarkus:1.0.0
+
+kubectl apply -f deployment.yaml
